@@ -1,0 +1,3 @@
+-add project name length constraint
+-limit listed projects to 10
+-add hide boolean to messages
