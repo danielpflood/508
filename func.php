@@ -12,8 +12,8 @@ function getProjectID($project_name){
 		return $projectID;
 	}
 }
-function getUserID($email){
-	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `email` = '$email'");
+function getUserID($username){
+	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `username` = '$username'");
 	$row = mysql_fetch_array($getUserID);
 	if(isset($row)){
 		$userID = $row['userID'];
@@ -29,9 +29,9 @@ function getProjectName($id){
 	}
 }
 function getCurrentUserID(){
-  	if (isset($_SESSION['email']) && $_SESSION['email'] != "") {
-  		$semail = $_SESSION['email'];
-    	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `email` = '$semail'");
+  	if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
+  		$susername = $_SESSION['username'];
+    	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `username` = '$susername'");
 		$row = mysql_fetch_array($getUserID);
 		if(isset($row)){
 			$userID = $row['userID'];
@@ -46,9 +46,20 @@ function getAppMessage(){
 	}
 }	
 function loggedIn(){
-	if (isset($_SESSION['email']) && $_SESSION['email'] != "") {
+	if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
 		return true;
 	}
+}
+function curPageURL() {
+ $pageURL = 'http';
+ if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ $pageURL .= "://";
+ if ($_SERVER["SERVER_PORT"] != "80") {
+  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+ } else {
+  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+ }
+ return $pageURL;
 }
 function listOwnedProjects(){
 	echo '<h3>Your Projects:</h3><form id="owned-projects" method="post" action="deleteProject.php"><ul>';
@@ -57,7 +68,7 @@ function listOwnedProjects(){
 	$i=0;
 	while($row = mysql_fetch_array($getProjects)){
 		$i++;
-		echo '<li><button name="deleteID" class="del_proj" value="'.$row['projectID'].'">Delete</button><a href="#" style="font-size:16px; text-decoration:none; padding-left:10px;">'.$row['name'].'</a>  <span style="float:right; font-size:small; color:grey;">'.$row['dateCreated'].'</span></li>';
+		echo '<li><button name="deleteID" class="del_proj" value="'.$row['projectID'].'">Delete</button><a href="'.curPageURL().'viewProject.php?projID='.$row['projectID'].'" style="font-size:16px; text-decoration:none; padding-left:10px;">'.$row['name'].'</a>  <span style="float:right; font-size:small; color:grey;">'.$row['dateCreated'].'</span></li>';
 	}
 	echo '</ul></form>';
 }
@@ -66,17 +77,17 @@ function listMessages(){
 	$userID = getCurrentUserID();
 	$getMessages = mysql_query("SELECT `fromID`, `message`, `dateSent`, `dateRead` FROM `Message` WHERE `toID` = '$userID'");
 	while($row = mysql_fetch_array($getMessages)){
-		echo '<li><span style="font-variant:bold;">From: </span>'.getUserEmail($row['fromID']).'<span style="padding-left:15px; color:brown;">'.$row['message'].'</span> <span style="float:right; font-size:small; color:grey;">'.$row['dateSent'].'</span></li>';
+		echo '<li><span style="font-variant:bold;">From: </span>'.getUserUsername($row['fromID']).'<span style="padding-left:15px; color:brown;">'.$row['message'].'</span> <span style="float:right; font-size:small; color:grey;">'.$row['dateSent'].'</span></li>';
 	}
 	echo '</ul>';
 }
-function getUserEmail($id){
+function getUserUsername($id){
   	if (isset($id) && $id != "") {
-    	$getUserEmail = mysql_query("SELECT DISTINCT `email` FROM `User` WHERE `userID` = '$id'");
-		$row = mysql_fetch_array($getUserEmail);
+    	$getUserUsername = mysql_query("SELECT DISTINCT `username` FROM `User` WHERE `userID` = '$id'");
+		$row = mysql_fetch_array($getUserUsername);
 		if(isset($row)){
-			$userEmail = $row['email'];
-			return $userEmail;
+			$userUsername = $row['username'];
+			return $userUsername;
 		}
     }
 }
@@ -89,6 +100,28 @@ function deleteProject($id){
 			header("Location: /508/projects");
 		}
     }
+}
+function showProject($id){
+	if (isset($id) && $id != "") {
+
+		$tempName = getProjectName($id);
+    	$sql = mysql_query("SELECT * FROM `Project` WHERE `projectID` = '$id';");
+    	
+		if($sql){
+			echo '<p> Showing details for project '.$id.', '.getProjectName($id).'<br />';
+			$row = mysql_fetch_row($sql);
+			echo '<pre>'.print_r($row).'</pre>';
+
+			$row2 = mysql_fetch_row(mysql_query("SELECT `userId` FROM `UserOwnsProject` WHERE `projectID` = '$id';"));
+			$owner = $row2[0];
+			if(getCurrentUserID()==$owner){
+				echo '<h2>You own this project</h2>';
+			}
+		}
+    }
+}
+function showProjectFiles($id){
+
 }
 function showUserSearch(){
 	echo '<h3>Find Users</h3>

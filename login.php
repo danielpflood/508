@@ -4,15 +4,15 @@ if(!isset($_POST['login'])){
 	header("Location: /508");
 }
 else{
-	if(isset($_POST['email'])&&$_POST['email']==""||!isset($_POST['email'])){
-		$error[] = "Email Field can't be left blank";
+	if(isset($_POST['username'])&&$_POST['username']==""||!isset($_POST['username'])){
+		$error[] = "Username Field can't be left blank";
 		$usererror = "1";
 	}
 	if(!isset($usererror)){
-		$email = mysql_real_escape_string($_POST['email']);
-		$sql = "SELECT * FROM User WHERE email = '$email'";
+		$username = mysql_real_escape_string($_POST['username']);
+		$sql = "SELECT * FROM User WHERE username = '$username'";
 		if(mysql_num_rows(mysql_query($sql))=="0"){
-			$error[] = "Can't find a user with this email"; 
+			$error[] = "Can't find a user with this username"; 
 		}
 	}
 	if(isset($_POST['pass'])&&$_POST['pass']==""||!isset($_POST['pass'])){ 
@@ -27,13 +27,13 @@ else{
 		}
 	}
 	if(!isset($error)){
-		$semail=mysql_real_escape_string($_POST['email']);
+		$susername=mysql_real_escape_string($_POST['username']);
 		$spass=md5($_POST['pass']);
-		$find = "SELECT * FROM User WHERE email = '$semail' AND password = '$spass'";
+		$find = "SELECT * FROM User WHERE username = '$susername' AND password = '$spass'";
 		if(mysql_num_rows(mysql_query($find))=="1"){
-			$_SESSION['email'] = $semail;
+			$_SESSION['username'] = $susername;
 			$datetime = date( 'Y-m-d H:i:s' );
-			$logindate = "UPDATE `User` SET `lastLoggedIn` = '$datetime' WHERE `User`.`email` = '$semail';";
+			$logindate = "UPDATE `User` SET `lastLoggedIn` = '$datetime' WHERE `User`.`username` = '$susername';";
 			mysql_query($logindate);
 			$_SESSION['msg']="Succesfully logged in!";
 			header("Location: /508");

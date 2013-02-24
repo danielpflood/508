@@ -1,6 +1,13 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'].'/508/func.php');
+ob_start();
 
+var_dump($_POST);
+
+$dump = ob_get_contents();
+
+ob_end_clean();
+$_SESSION['msg'] .= '<pre>'.$dump.'</pre>';
 if(!isset($_POST['createproject']))//checking if user has entered this page directly
 {
 	header('Location: /projects/new');
@@ -8,7 +15,7 @@ if(!isset($_POST['createproject']))//checking if user has entered this page dire
 else{
 	if(isset($_POST['project_name'])&&$_POST['project_name']==""||!isset($_POST['project_name'])){
 		$error = true;
-		$_SESSION['msg']='Please fill in the project name.';
+		$_SESSION['msg'].='Please fill in the project name.';
 		$projectnameerror = "1";
 	}
 	if(!isset($projectnameerror)){
@@ -16,7 +23,7 @@ else{
 		$sql = "SELECT * FROM Project WHERE name  = '$project_name'";
 		if(mysql_num_rows(mysql_query($sql))=="1"){
 			$error = true;
-			$_SESSION['msg']='Sorry, this project name is already in use.';
+			$_SESSION['msg'].='Sorry, this project name is already in use.';
 		}
 	}
 }
@@ -34,7 +41,7 @@ if(!isset($error)){
 			$projectID = getProjectID($sproject_name);
 			$save2 = mysql_query("INSERT INTO `UserOwnsProject` (`userId`, `projectID`) VALUES ('$user', '$projectID')");
 			if($save2){
-				$_SESSION['msg']="Succesfully created project!";
+				$_SESSION['msg'].="Succesfully created project!";
 				header('Location: /508/projects');
 			}
 			else{
@@ -43,7 +50,7 @@ if(!isset($error)){
 			}
 	}
 	else{
-		$_SESSION['msg']="Some error occured durring processing your data.";
+		$_SESSION['msg'].="Some error occured durring processing your data.";
 		header('Location: /508/projects/new');
 	}
 }

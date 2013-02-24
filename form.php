@@ -1,5 +1,5 @@
 <form name="login" method="post" action="login.php">
-email<input name="email" type="text" id="email" value="<?php if(isset($_POST['email'])) echo htmlspecialchars($_POST['email']);?>">
+username<input name="username" type="text" id="username" value="<?php if(isset($_POST['username'])) echo htmlspecialchars($_POST['username']);?>">
 <br />
 password<input name="pass" type="password" id="pass" >
 <input name="login" type="submit" id="login" value="login">
