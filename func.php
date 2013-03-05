@@ -1,8 +1,11 @@
 <?php
+//TODO:convert all mysql to mysqli
 session_start();
 include_once('db.php');
 function loadStuff(){
-	echo '<script language="javascript" type="text/javascript" src="js/jquery-1.8.3.min.js"></script>';
+	echo '<script language="javascript" type="text/javascript" src="/508/js/jquery-1.8.3.min.js"></script>';
+	echo '<script language="javascript" type="text/javascript" src="/508/js/bootstrap.min.js"></script>';
+	echo '<link href="/508/css/bootstrap.min.css" rel="stylesheet">';
 }
 function getProjectID($project_name){
 	$getProjectID = mysql_query("SELECT DISTINCT `projectID` FROM `Project` WHERE `name` = '$project_name'");
@@ -59,18 +62,54 @@ function curPageURL() {
  } else {
   $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
  }
- return $pageURL;
+ return $pageURL; 
+}
+function isOwner($projectID,$userID){
+		$sql = mysql_query("SELECT * FROM `UserOwnsProject` WHERE `projectID` = '$projectID' AND `userId` = '$userID'");
+		$row=mysql_fetch_array($sql);
+		return (($row['userId']!='' && $row['userId']!=NULL) ? true : false);
 }
 function listOwnedProjects(){
-	echo '<h3>Your Projects:</h3><form id="owned-projects" method="post" action="deleteProject.php"><ul>';
 	$userID = getCurrentUserID();
 	$getProjects = mysql_query("SELECT * FROM `Project` WHERE `projectID` IN (SELECT DISTINCT `projectID` FROM `UserOwnsProject` WHERE `userId` = '$userID')");
 	$i=0;
 	while($row = mysql_fetch_array($getProjects)){
 		$i++;
-		echo '<li><button name="deleteID" class="del_proj" value="'.$row['projectID'].'">Delete</button><a href="'.curPageURL().'viewProject.php?projID='.$row['projectID'].'" style="font-size:16px; text-decoration:none; padding-left:10px;">'.$row['name'].'</a>  <span style="float:right; font-size:small; color:grey;">'.$row['dateCreated'].'</span></li>';
+		if($i==1){	echo '<h3>Projects you own:</h3><ul>';}
+		echo '<li>
+			<a href="'.curPageURL().'viewProject.php?projID='.$row['projectID'].'" style="font-size:16px; text-decoration:none; padding-left:10px;">'.$row['name'].'</a>  <span style="float:right; font-size:small; color:grey;">'.$row['dateCreated'].'</span>
+			<a href="'.curPageURL().'addCollaborator.php?projID='.$row['projectID'].'" class="btn" style="font-size:16px; text-decoration:none; padding-left:10px;">Add Collaborator</a>
+			<form id="owned-projects" method="post" action="deleteProject.php"><button name="deleteID" class="del_proj" value="'.$row['projectID'].'">Delete</button></form></li>';
 	}
-	echo '</ul></form>';
+	echo '</ul>';
+}
+function listCollabProjects(){
+	$userID = getCurrentUserID();
+	$getProjects = mysql_query("SELECT * FROM `Project` WHERE `projectID` IN (SELECT DISTINCT `projectID` FROM `ProjectHasCollaborator` WHERE `userId` = '$userID')");
+	$i=0;
+	while($row = mysql_fetch_array($getProjects)){
+		$i++;
+		if($i==1){echo '<h3>Collab Projects:</h3><ul>';}
+		echo '<li><a href="'.curPageURL().'viewProject.php?projID='.$row['projectID'].'" style="font-size:16px; text-decoration:none; padding-left:10px;">'.$row['name'].'</a>  <span style="float:right; font-size:small; color:grey;">'.$row['dateCreated'].'</span></li>';
+	}
+	echo '</ul>';
+}
+function addUserToProject($projectID, $userID){
+	if(empty($userID)){
+		$_SESSION['msg'].='User doesn\'t exist.';
+		header("Location: /508/projects");
+	}
+	else{
+		$addUser = mysql_query("INSERT INTO `ProjectHasCollaborator` (`projectID`, `userID`) VALUES ('$projectID', '$userID')");
+		if($addUser){
+			$_SESSION['msg'].='Added collaborator "'.$userID.'" to "'.$projectID.'".';
+				header("Location: /508/projects");
+		}
+		else{
+			$_SESSION['msg'].='Error adding collaborator "'.$userID.'" to "'.$projectID.'".';
+				header("Location: /508/projects");
+		}
+	}
 }
 function listMessages(){
 	echo '<h3>Your Messages:</h3><ul>';
@@ -119,6 +158,17 @@ function showProject($id){
 			}
 		}
     }
+}
+function getAllUsers(){
+	$sql = mysql_query("SELECT DISTINCT `username` FROM `User`;");
+	if($sql){
+		$thearray = mysql_fetch_array($sql);
+			    	echo '<p>row is: '.print_r($thearray).'</p>';
+			    	return Array('one','two');//TODO: FIX ALL THIS
+	}
+	else{
+		return NULL;
+	}
 }
 function showProjectFiles($id){
 
