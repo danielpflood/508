@@ -6,6 +6,7 @@ function loadStuff(){
 	echo '<script language="javascript" type="text/javascript" src="/508/js/jquery-1.8.3.min.js"></script>';
 	echo '<script language="javascript" type="text/javascript" src="/508/js/bootstrap.min.js"></script>';
 	echo '<link href="/508/css/bootstrap.min.css" rel="stylesheet">';
+	echo '<link href="/508/css/style.css" rel="stylesheet">';
 }
 function getProjectID($project_name){
 	$getProjectID = mysql_query("SELECT DISTINCT `projectID` FROM `Project` WHERE `name` = '$project_name'");
