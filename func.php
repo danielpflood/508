@@ -121,6 +121,28 @@ function listMessages(){
 	}
 	echo '</ul>';
 }
+
+function listUsers(){
+	echo '<h3>Users:</h3>';
+	echo '<table id="Users-Table">
+			<thead>
+				<tr>
+					<th>username</th>
+					<th>dateRegistered</th>
+					<th>lastLoggedIn</th>
+				</tr>
+			</thead>
+		  <tbody>';
+	$getUsers = mysql_query("SELECT `dateRegistered`, `lastLoggedIn`, `username` FROM `User`");
+	while($row = mysql_fetch_array($getUsers)){
+		echo '<tr>
+				<td>'.$row['username'].'</td>
+				<td>'.$row['dateRegistered'].'</td>
+				<td>'.$row['lastLoggedIn'].'</td>
+			  </tr>';
+	}
+	echo '</tbody></table>';
+}
 function getUserUsername($id){
   	if (isset($id) && $id != "") {
     	$getUserUsername = mysql_query("SELECT DISTINCT `username` FROM `User` WHERE `userID` = '$id'");

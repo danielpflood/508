@@ -3,5 +3,6 @@
   	<br />
   	<a href="/508/messages/" style="color:grey; text-decoration: none; padding-right:10px;"> Messages</a>
   	<a href="/508/projects/" style="color:grey; text-decoration: none; padding-right:10px;"> Projects</a>
+  	<a href="/508/users/" style="color:grey; text-decoration: none; padding-right:10px;"> Users</a>
   	<a href="/508/logout.php" style="color:grey; text-decoration: none;"> Logout</a> 
   </div>
