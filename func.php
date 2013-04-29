@@ -7,6 +7,9 @@ function loadStuff(){
 	echo '<script language="javascript" type="text/javascript" src="/508/js/bootstrap.min.js"></script>';
 	echo '<link href="/508/css/bootstrap.min.css" rel="stylesheet">';
 	echo '<link href="/508/css/style.css" rel="stylesheet">';
+	echo '<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+		  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+		  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>';
 }
 function getProjectID($project_name){
 	$getProjectID = mysql_query("SELECT DISTINCT `projectID` FROM `Project` WHERE `name` = '$project_name'");
@@ -127,9 +130,10 @@ function listUsers(){
 	echo '<table id="Users-Table">
 			<thead>
 				<tr>
-					<th>username</th>
-					<th>dateRegistered</th>
-					<th>lastLoggedIn</th>
+					<th>User</th>
+					<th>Registered</th>
+					<th>Last Logged In</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 		  <tbody>';
@@ -139,9 +143,13 @@ function listUsers(){
 				<td>'.$row['username'].'</td>
 				<td>'.$row['dateRegistered'].'</td>
 				<td>'.$row['lastLoggedIn'].'</td>
+				<td><a href="#">Message</a></td>
 			  </tr>';
 	}
 	echo '</tbody></table>';
+	echo '<script type="text/javascript">$(document).ready(function() {
+    	     $(\'#Users-Table\').dataTable();
+		  } );</script>';
 }
 function getUserUsername($id){
   	if (isset($id) && $id != "") {
