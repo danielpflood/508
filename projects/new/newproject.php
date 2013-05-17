@@ -1,13 +1,11 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'].'/508/func.php');
-ob_start();
-
+/*ob_start();
 var_dump($_POST);
-
 $dump = ob_get_contents();
-
 ob_end_clean();
 $_SESSION['msg'] .= '<pre>'.$dump.'</pre>';
+*/
 if(!isset($_POST['createproject']))//checking if user has entered this page directly
 {
 	header('Location: /projects/new');

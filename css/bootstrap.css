@@ -226,20 +226,12 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
-  color: #333333;
-  background-color: #ffffff;
+  /*color: #333333;
+  background-color: #ffffff;*/
 }
 
-a {
-  color: #0088cc;
-  text-decoration: none;
-}
 
-a:hover,
-a:focus {
-  color: #005580;
-  text-decoration: underline;
-}
+
 
 .img-rounded {
   -webkit-border-radius: 6px;
@@ -738,7 +730,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 10px 0;
+  /*margin: 10px 0;*/
   font-family: inherit;
   font-weight: bold;
   line-height: 20px;
@@ -1096,7 +1088,7 @@ input[type="color"],
   margin-bottom: 10px;
   font-size: 14px;
   line-height: 20px;
-  color: #555555;
+  /*color: #555555;*/
   vertical-align: middle;
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
@@ -1113,7 +1105,7 @@ textarea {
   height: auto;
 }
 
-textarea,
+/*textarea,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -1138,7 +1130,7 @@ input[type="color"],
      -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
        -o-transition: border linear 0.2s, box-shadow linear 0.2s;
           transition: border linear 0.2s, box-shadow linear 0.2s;
-}
+}*/
 
 textarea:focus,
 input[type="text"]:focus,

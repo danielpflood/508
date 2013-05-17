@@ -8,6 +8,6 @@
     <?php loadStuff(); ?>
   </head>
   <body>
-	<div id="content">
-<h1><a href="/508" style="text-decoration: none; color:black;">Molasses Music</a></h1>
+	<div id="content" class="transparent">
+<h1><a href="/508">Molasses Music</a></h1>
 <?php getAppMessage(); ?>
