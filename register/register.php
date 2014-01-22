@@ -28,7 +28,7 @@ if(isset($_POST['password'])&&$_POST['password']==""||!isset($_POST['password'])
 	$error[] = "fill in your password"; 
 }
 if(isset($error)){
-	if(is_array($error)){echo "<div class=\"error\"><span>please check the errors and refill the form<span><br/>";
+	if(is_array($error)){echo "<div class=\"error\"><span>please check the errors and refill the form</span><br/>";
 	foreach ($error as $ers) {
 		echo "<span>".$ers."</span><br/>";
 	}
@@ -64,7 +64,7 @@ if(!isset($error)){
 		header("Location: ../");
 	}
 	else{
-		echo "<div class=\"warning\"><span>Some Error occured durring processing your data</div>";
+		echo "<div class=\"warning\"><span>Some Error occured durring processing your data</span></div>";
 	}
 }
 }

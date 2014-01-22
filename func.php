@@ -3,6 +3,31 @@
 session_start();
 include_once('db.php');
 $_SESSION['home']='http://floodidas.dyndns.info/508/';
+
+
+/*****************
+  JSON functions
+******************/
+function listUsersJSON(){
+	$getUsers = mysql_query("SELECT `dateRegistered`, `lastLoggedIn`, `username` FROM `User`");
+	$rows = array();
+	while($row = mysql_fetch_assoc($getUsers)){
+		$rows[] = $row;
+	}
+	return json_encode($rows);
+}
+function getUserUsernameJSON($id){
+  	if (isset($id) && $id != "") {
+    	$getUserUsername = mysql_query("SELECT DISTINCT `username` FROM `User` WHERE `userID` = '$id'");
+		$row = mysql_fetch_array($getUserUsername);
+		return json_encode($row);
+    }
+}
+function getUserIDJSON($username){
+	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `username` = '$username'");
+	$row = mysql_fetch_array($getUserID);
+	return json_encode($row);
+}
 function loadStuff(){
 	echo '<script language="javascript" type="text/javascript" src="/508/js/jquery-1.8.3.min.js"></script>'."\n";
 	//echo '<script language="javascript" type="text/javascript" src="/508/js/bootstrap.min.js"></script>'."\n";
@@ -12,9 +37,6 @@ function loadStuff(){
 	echo '<link href="/508/css/jquery.autocomplete.css" rel="stylesheet">'."\n";
 	echo '<script src="/508/js/jquery.autocomplete.js"></script> '."\n";
 	echo '<link href="/508/css/bootstrap.css" rel="stylesheet">'."\n";
-	
-	
-
 }
 function loadAutoCompleteUser(){
 		    echo '
