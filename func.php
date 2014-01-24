@@ -16,12 +16,25 @@ function listUsersJSON(){
 	}
 	return json_encode($rows);
 }
+function listProjectsJSON(){
+	$getProjects = mysql_query("SELECT * FROM `Project`");
+	$rows = array();
+	while($row = mysql_fetch_assoc($getProjects)){
+		$rows[] = $row;
+	}
+	return json_encode($rows);
+}
 function getUserUsernameJSON($id){
   	if (isset($id) && $id != "") {
     	$getUserUsername = mysql_query("SELECT DISTINCT `username` FROM `User` WHERE `userID` = '$id'");
 		$row = mysql_fetch_array($getUserUsername);
 		return json_encode($row);
     }
+}
+function getProjectNameJSON($id){
+	$getProjectName = mysql_query("SELECT DISTINCT `name` FROM `Project` WHERE `projectID` = '$id'");
+	$row = mysql_fetch_array($getProjectName);
+	return json_encode($row);
 }
 function getUserIDJSON($username){
 	$getUserID = mysql_query("SELECT DISTINCT `userID` FROM `User` WHERE `username` = '$username'");
