@@ -10,6 +10,8 @@
     	
 	}
 	else{
+		$_SESSION['msg']="Must be logged in to access that page.";
+
 		 header("Location: /508");
 	}
 	?>

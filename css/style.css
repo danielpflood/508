@@ -80,4 +80,7 @@ input { font-size: 28px; padding: 10px;
 	display: block; margin: 20px 0; }
 
 
+.project_list li{
+	padding-top:15px;	
+}
 
