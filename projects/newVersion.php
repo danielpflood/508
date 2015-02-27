@@ -1,17 +1,31 @@
 <?php 
 include_once($_SERVER['DOCUMENT_ROOT'].'/508/header.php');
+function createNewVersion($project_id,$changes,$creator){
+	$currentVersion = getCurrentVersionID($project_id);
+	$newVersionNumber = $currentVersion+1;
+	$datetime = date( 'Y-m-d H:i:s' );
+	echo 'currentversion result= '.$currentVersion.'<br />';
+	$newVersion = mysql_query("INSERT INTO `Version` (`versionNumber`, `projectID`, `createdBy`, `dateCreated`, `changes`) VALUES ('$newVersionNumber', '$project_id', '$creator', '$datetime', '$changes');");
+	if($newVersion){
+		$_SESSION['msg'].='Created new version. Version "'.($newVersionNumber).'.';
+		$_SESSION['msg'].="\n";
+	}
+	else{
+		//todo add error handling
+		$_SESSION['msg'].='Error creating version "';
+		$_SESSION['msg'].='$project_id,$changes,$creator ->'.$project_id.','.$changes.','.$creator."\n";
+	}
+}
+
   if(loggedIn()){
   	if(isset($_POST['projectID'])&&
   		isset($_POST['change_notes'])&&
-  		 isset($_POST['creatorID'])){//$project_id,$changes,$creator
-		//$dump = var_dump($_POST);
-		//print_r($dump);
+  		 isset($_POST['creatorID'])){
 		createNewVersion($_POST['projectID'],$_POST['change_notes'],$_POST['creatorID']);
 		header("Location: /508/projects/viewProject.php?projID=".$_POST['projectID']."");
   	}
   	else{
   		include($_SERVER['DOCUMENT_ROOT'].'/508/loggedin.php');
-  		
 	    echo '<h2>Create new version</h2>';
 	    echo '<br />';
 	    if(isset($_GET['projID'])){

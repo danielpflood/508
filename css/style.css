@@ -31,13 +31,17 @@ h1 a:hover{
 	text-decoration: none;
 	color:#3C7563;
 }
+td,th{
+	padding:15px;
+	text-align:left;
+}
+th{
+	padding-bottom:5px;
+}
 input {
-	background-color: #73B7A8;
+	background-color: #ffffff;
 	border-color: #A20A16;
 	opacity: 0.8;
-}
-input[type=text] {
-	background-color: transparent;
 }
 #content{
 	margin-left:20px;

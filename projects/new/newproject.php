@@ -1,11 +1,21 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'].'/508/func.php');
-/*ob_start();
-var_dump($_POST);
-$dump = ob_get_contents();
-ob_end_clean();
-$_SESSION['msg'] .= '<pre>'.$dump.'</pre>';
-*/
+function createNewVersion($project_id,$changes,$creator){
+	$currentVersion = getCurrentVersionID($project_id);
+	$newVersionNumber = $currentVersion+1;
+	$datetime = date( 'Y-m-d H:i:s' );
+	echo 'currentversion result= '.$currentVersion.'<br />';
+	$newVersion = mysql_query("INSERT INTO `Version` (`versionNumber`, `projectID`, `createdBy`, `dateCreated`, `changes`) VALUES ('$newVersionNumber', '$project_id', '$creator', '$datetime', '$changes');");
+	if($newVersion){
+		$_SESSION['msg'].='Created new version. Version "'.($newVersionNumber).'.';
+		$_SESSION['msg'].="\n";
+	}
+	else{
+		//todo add error handling
+		$_SESSION['msg'].='Error creating version "';
+		$_SESSION['msg'].='$project_id,$changes,$creator ->'.$project_id.','.$changes.','.$creator."\n";
+	}
+}
 if(!isset($_POST['createproject']))//checking if user has entered this page directly
 {
 	header('Location: /projects/new');
@@ -40,6 +50,7 @@ if(!isset($error)){
 			$save2 = mysql_query("INSERT INTO `UserOwnsProject` (`userId`, `projectID`) VALUES ('$user', '$projectID')");
 			if($save2){
 				$_SESSION['msg'].="Succesfully created project!";
+				createNewVersion($projectID,"Initial",$user);
 				header('Location: /508/projects');
 			}
 			else{
