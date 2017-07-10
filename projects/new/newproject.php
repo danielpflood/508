@@ -1,9 +1,9 @@
 <?php
-include_once('../func.php'); 
+include($_SERVER['DOCUMENT_ROOT'].'/508/func.php');
 
 if(!isset($_POST['createproject']))//checking if user has entered this page directly
 {
-	header('Location: /new');
+	header('Location: /projects/new');
 }
 else{
 	if(isset($_POST['project_name'])&&$_POST['project_name']==""||!isset($_POST['project_name'])){
@@ -35,20 +35,20 @@ if(!isset($error)){
 			$save2 = mysql_query("INSERT INTO `UserOwnsProject` (`userId`, `projectID`) VALUES ('$user', '$projectID')");
 			if($save2){
 				$_SESSION['msg']="Succesfully created project!";
-				header('Location: ../');
+				header('Location: /508/projects');
 			}
 			else{
 				$_SESSION['msg'].="<br />Error adding UserOwnsProject entry.";
-				header('Location: ../');
+				header('Location: /508');
 			}
 	}
 	else{
 		$_SESSION['msg']="Some error occured durring processing your data.";
-		header('Location: /508/new');
+		header('Location: /508/projects/new');
 	}
 }
 else{
-	header('Location: /508/new');
+	header('Location: /508/projects/new');
 }
 
 ?>
